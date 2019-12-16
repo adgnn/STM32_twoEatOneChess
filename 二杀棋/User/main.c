@@ -303,30 +303,30 @@ int main()
 	/********************************************************************************/
 
 	/*********************************数码管初始化**************************************/
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC,ENABLE); 
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE,ENABLE); 
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD,ENABLE);
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 |GPIO_Pin_14| GPIO_Pin_15;  
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; 
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;  
-	GPIO_Init(GPIOC,&GPIO_InitStructure);
+//	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC,ENABLE); 
+//	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE,ENABLE); 
+//	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD,ENABLE);
+//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 |GPIO_Pin_14| GPIO_Pin_15;  
+//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+//	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; 
+//	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;  
+//	GPIO_Init(GPIOC,&GPIO_InitStructure);
 
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 |GPIO_Pin_7| GPIO_Pin_9 | GPIO_Pin_11 | GPIO_Pin_13 | GPIO_Pin_15;  
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;  
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;  
-	GPIO_Init(GPIOE,&GPIO_InitStructure); 
+//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 |GPIO_Pin_7| GPIO_Pin_9 | GPIO_Pin_11 | GPIO_Pin_13 | GPIO_Pin_15;  
+//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+//	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;  
+//	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;  
+//	GPIO_Init(GPIOE,&GPIO_InitStructure); 
 
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10 |GPIO_Pin_14|GPIO_Pin_0;  
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; 
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;  
-	GPIO_Init(GPIOD,&GPIO_InitStructure);
+//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10 |GPIO_Pin_14|GPIO_Pin_0;  
+//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+//	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; 
+//	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;  
+//	GPIO_Init(GPIOD,&GPIO_InitStructure);
 
-	GPIO_SetBits(GPIOC, GPIO_Pin_13 |GPIO_Pin_14| GPIO_Pin_15);
-	GPIO_SetBits(GPIOE, GPIO_Pin_6 |GPIO_Pin_7| GPIO_Pin_9 | GPIO_Pin_11 | GPIO_Pin_13 | GPIO_Pin_15);
-	GPIO_SetBits(GPIOD, GPIO_Pin_10 |GPIO_Pin_14|GPIO_Pin_0);
+//	GPIO_SetBits(GPIOC, GPIO_Pin_13 |GPIO_Pin_14| GPIO_Pin_15);
+//	GPIO_SetBits(GPIOE, GPIO_Pin_6 |GPIO_Pin_7| GPIO_Pin_9 | GPIO_Pin_11 | GPIO_Pin_13 | GPIO_Pin_15);
+//	GPIO_SetBits(GPIOD, GPIO_Pin_10 |GPIO_Pin_14|GPIO_Pin_0);
 
 	/********************************************************************************/	
 	
@@ -735,9 +735,9 @@ void LCD_DrawAChess(int x, int y, int num, uint16_t GRB)
     }
 }
 
-/* 玩家1选棋子 */
-void choosechess1(int number, enum gameState state, struct Player* Player1){
-	switch(state){
+/* 选棋子 */
+void choosechess(int number){
+	switch(State){
 			case 1: //玩家1的回合
 					if(Player1->playerState == chooseChess){
 							if(Player1->chessState[number-1] == 1){
@@ -749,22 +749,11 @@ void choosechess1(int number, enum gameState state, struct Player* Player1){
 							}
 					}
 					else{
-							//玩家1已经被吃，数码管显示“ERR”，重新选棋子
+							//玩家1已经被吃，重新选棋子
 							
 					}
 					break;
 					
-			case 3:
-					//玩家1获胜
-					break;
-
-			default:
-					break;
-	}
-}
-/* 玩家2选棋子 */
-void choosechess2(int number, enum gameState state, struct Player* Player2){
-	switch(state){
 			case 2: //玩家2的回合
 					if(Player2->playerState == chooseChess){
 							if(Player2->chessState[number-1] == 1){
@@ -776,24 +765,27 @@ void choosechess2(int number, enum gameState state, struct Player* Player2){
 							}
 					}
 					else{
-							//玩家2已经被吃，数码管显示“ERR”，重新选棋子
+							//玩家2已经被吃，重新选棋子
 							
 					}
-					break;
+					break;	
 					
+			case 3:
+					//玩家1获胜
+					break;
 			case 4:
 					//玩家2获胜
 					break;
-
 			default:
 					break;
 	}
 }
 
-/* 玩家1选方向 需要判断cx和cy上面一格是否越界、是否有其它棋子*/
-void choosedir1(int direction, enum gameState state, struct Player* Player1){
+
+/* 选方向 需要判断cx和cy上面一格是否越界、是否有其它棋子*/
+void choosedir(int direction){
 	int tempX,tempY;
-	switch(state){
+	switch(State){
 			case 1:
 					if(Player1->playerState == chooseDir){
 							if(Player1->chessState[whichChess-1] == 1){
@@ -809,30 +801,17 @@ void choosedir1(int direction, enum gameState state, struct Player* Player1){
 													Player1->playerState = Move;
 											}
 											else{
-													//有棋子冲突报错，数码管显示“ERR”，重新选方向
+													//有棋子冲突报错，重新选方向
 													
 											}
 									}
 									else{
-											//越界报错，数码管显示“ERR”，重新选方向
+											//越界报错，重新选方向
 											
 									}
 							}
 					}
-
-
-			case 3:
-
-					break;
-
-			default:
-					break;
-	}
-}
-/* 玩家2选方向 需要判断cx和cy上面一格是否越界、是否有其它棋子*/
-void choosedir2(int direction, enum gameState state, struct Player* Player2){
-	int tempX,tempY;
-	switch(state){
+					
 			case 2:
 					if(Player2->playerState == chooseDir){
 							if(Player2->chessState[whichChess-1] == 1){
@@ -848,30 +827,34 @@ void choosedir2(int direction, enum gameState state, struct Player* Player2){
 													Player2->playerState = Move;
 											}
 											else{
-													//有棋子冲突报错，数码管显示“ERR”，重新选方向
+													//有棋子冲突报错，重新选方向
 													
 											}
 									}
 									else{
-											//越界报错，数码管显示“ERR”，重新选方向
+											//越界报错，重新选方向
 											
 									}
 							}
 					}
 
 
+			case 3:
+
+					break;
+			
 			case 4:
 
 					break;
-
 			default:
 					break;
 	}
 }
 
-/* 玩家1确认落子 */
-void acknowledge1(enum gameState state, struct Player* Player1){
-	switch(state){
+
+/* 确认落子 */
+void acknowledge(){
+	switch(State){
 			case 1:
 					if(Player1->playerState == Move){
 							//移动player1的某个子
@@ -884,17 +867,7 @@ void acknowledge1(enum gameState state, struct Player* Player1){
 							Player1 -> chessX[whichChess-1] = gocx;
 							Player1 -> chessY[whichChess-1] = gocy;
 					}
-			case 3:
-
-					break;
-
-			default:
-					break;
-	}
-}
-/* 玩家2确认落子 */
-void acknowledge2(enum gameState state, struct Player* Player2){
-	switch(state){
+					
 			case 2:
 					if(Player2->playerState == Move){
 							//移动player1的某个子
@@ -907,10 +880,13 @@ void acknowledge2(enum gameState state, struct Player* Player2){
 							Player2 -> chessX[whichChess-1] = gocx;
 							Player2 -> chessY[whichChess-1] = gocy;
 					}
+					
+			case 3:
+
+					break;
 			case 4:
 
 					break;
-
 			default:
 					break;
 	}
