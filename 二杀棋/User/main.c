@@ -105,7 +105,7 @@ int gocx; //棋子待走坐标x
 int gocy; //棋子待走坐标y
 int whichChess; //选中棋子号码
 
-int CB[5][4] ={ {1,1,1,1}, {1,0,0,1}, {0,0,0,0}, {1,0,0,1}, {1,1,1,1} };
+int CB[5][4] ={ {1,1,1,1}, {1,0,0,1}, {0,0,0,0}, {2,0,0,2}, {2,2,2,2} };
 int i;
 	
 struct Player player1 = {
@@ -778,7 +778,7 @@ void acknowledge(){
 				LCD_DrawAChess(gocx, gocy, whichChess, GREEN);
 				//更新CB[5][4]
 				CB[cx][cy] = 0;//移动前位置赋为0
-				CB[gocx][gocy] = 1;//移动后位置赋为1
+				CB[gocx][gocy] = 2;//移动后位置赋为2
 				//更新Player1对应的chessX、chessY
 				Player2 -> chessX[whichChess-1] = gocx;
 				Player2 -> chessY[whichChess-1] = gocy;
@@ -821,6 +821,72 @@ void cancel(){
 			break;
 		default:
 			break;
+	}
+}
+
+void judge()
+{
+	int beforex = cx, beforey = cy;
+	int movedx = gocx, movedy = gocy;
+	int temp = 0;
+	int flag;
+	for (int i=0; i<5; i++){
+		temp += CB[i][cy]; 
+	}
+	if (temp == 3){ //若改行只有3个棋子，判断是否能吃
+		flag=0;
+		if(State == 1){//玩家1
+			for(int i=0; i<5; i++){ //有限状态机判断 我-我-敌 的状态是否存在
+				if(flag == 0){
+					if(CB[i][cy] == 1){
+						flag = 1;
+					}
+				}else if(flag == 1){
+					if(CB[i][cy] == 1){
+						flag = 2;
+					}
+				}else if(flag == 2){
+					if(CB[i][cy] == 2){
+						flag = 0;
+						for(int j = 0; j<6; j++){
+							if(i == Player2->chessX[j] && cy == Player2->chessY[j]){
+								Player2->chessState[j+1] = 0;
+								break;
+							}
+					}
+					CB[i][cy] = 0;
+					break;
+					}
+				}
+			}
+		}
+		else if(State == 2){
+			if(State == 1){
+				for(int i=0; i<5; i++){
+					if(flag == 0){
+						if(CB[i][cy] == 1){
+							flag = 1;
+						}
+					}else if(flag == 1){
+						if(CB[i][cy] == 1){
+							flag = 2;
+						}
+					}else if(flag == 2){
+						if(CB[i][cy] == 2){
+							flag = 3;
+							for(int j = 0; j<6; j++){
+								if(i == Player2->chessX[j] && cy == Player2->chessY[j]){
+									Player2->chessState[j+1] = 0;
+									break;
+								}
+							}
+						CB[i][cy] = 0;
+						break;
+						}
+					}
+				}
+			}
+		}
 	}
 }
 /***********************************粗延时函数*************************************/
