@@ -87,6 +87,7 @@ void LCD_DrawRect(u16 ox, u16 oy, u16 ex, u16 ey, uint16_t GRB);
 void clearAll();
 void LCD_DrawAChess(int x, int y, int num, uint16_t GRB);
 void DrawCB();
+void judge();
 /********************************************************************************/
 
 /*********************************全局变量声明************************************/
@@ -105,8 +106,13 @@ int gocx; //棋子待走坐标x
 int gocy; //棋子待走坐标y
 int whichChess; //选中棋子号码
 
+<<<<<<< Updated upstream
 int CB[5][4] ={ {1,1,1,1}, {1,0,0,1}, {0,0,0,0}, {1,0,0,1}, {1,1,1,1} };
 int i;
+=======
+int CB[5][4] ={ {1,1,1,1}, {1,0,0,1}, {0,0,0,0}, {2,0,0,2}, {2,2,2,2} };
+int i,j;
+>>>>>>> Stashed changes
 	
 struct Player player1 = {
 {1,1,1,1,1,1}, 
@@ -800,6 +806,7 @@ void choosedir(int direction){
 /* 确认落子 */
 void acknowledge(){
 	switch(State){
+<<<<<<< Updated upstream
 			case 1:
 <<<<<<< HEAD
 					if(Player1->playerState == Move){
@@ -873,6 +880,533 @@ void acknowledge(){
 		}
 >>>>>>> 52b67041114986a55d804881ed55d625e057b9db
 	}
+=======
+		case 1:
+			if(Player1->playerState == Move){
+				//移动player1的某个子
+				//LCD_DrawAChess(cx, cy, whichChess, WHITE);
+				//LCD_DrawAChess(gocx, gocy, whichChess, BLUE);
+				//更新CB[5][4]
+				CB[cx][cy] = 0;//移动前位置赋为0
+				CB[gocx][gocy] = 1;//移动后位置赋为1
+				//更新Player1对应的chessX、chessY
+				Player1 -> chessX[whichChess-1] = gocx;
+				Player1 -> chessY[whichChess-1] = gocy;
+				judge();
+				//转换状态
+				State = 2;
+				Player2->playerState = chooseChess;
+			}
+				
+		case 2:
+			if(Player2->playerState == Move){
+				//移动player1的某个子
+				//LCD_DrawAChess(cx, cy, whichChess, WHITE);
+				//LCD_DrawAChess(gocx, gocy, whichChess, GREEN);
+				//更新CB[5][4]
+				CB[cx][cy] = 0;//移动前位置赋为0
+				CB[gocx][gocy] = 2;//移动后位置赋为2
+				//更新Player1对应的chessX、chessY
+				Player2 -> chessX[whichChess-1] = gocx;
+				Player2 -> chessY[whichChess-1] = gocy;
+				judge();
+				
+				//转换状态
+				State = 1;
+				Player1->playerState = chooseChess;
+			}
+				
+		case 3:
+
+			break;
+		case 4:
+
+			break;
+		default:
+			break;
+	}
+}
+
+void cancel(){
+		switch(State){
+		case 1:
+			if(Player1->playerState == chooseDir){
+				Player1->playerState = chooseChess;
+			}
+			else if(Player1->playerState == Move)
+				Player1->playerState = chooseDir;
+		case 2:
+			if(Player2->playerState == chooseDir){
+				Player2->playerState = chooseChess;
+			}
+			else if(Player2->playerState == Move)
+				Player2->playerState = chooseDir;
+				
+		case 3:
+
+			break;
+		case 4:
+
+			break;
+		default:
+			break;
+	}
+}
+
+void judge()
+{
+    // use cx cy gocx gocy to judge if there's a change to eat rival.
+    /*
+    以cy举例： 
+    */
+    //若cy所在的列只有3个棋子
+    int tempcount = 0;
+    int enermyX, enermyY; //检测到可吃掉的情况时，记录将要吃掉的敌人棋子的坐标
+    for(i=0; i<5 ;i++){if(CB[i][cy] != 0){tempcount++;}}
+    int flag = 0;
+		int tempc;
+    if(tempcount == 3){
+        //用有限状态机方法检测是否有我-我-敌，或敌-我-我的模式
+        if(State == 1){
+            for(i=0; i<5; i++){
+                tempc = CB[i][cy];
+                if(flag == 0){
+                    if(tempc == 1){flag = 1;}
+                    else if(tempc == 2){flag = 4;}
+                }
+                else if(flag == 1){
+                    if(tempc == 1){flag = 2;}
+                    else if(tempc == 0 || tempc == 2){flag = 0; break;}
+                }
+                else if(flag == 2){
+                    if(tempc == 2){
+                        // 识别出我-我-敌
+                        flag = 0;
+                        enermyX = i;
+                        enermyY = cy;
+                        // 找出被吃掉的是敌方的哪个棋子
+                        for(j=0; j<6; j++){
+                            if(Player2->chessX[j]==enermyX && Player2->chessY[j]==enermyY){
+                                // 清除Player2对应棋子的状态，置棋盘上对应位置为1
+                                Player2->chessState[j] = 0;
+                                CB[enermyX][enermyY] = 0;
+                                break;
+                            }
+                        }
+                    }
+                    else if(tempc == 0 || tempc == 1){flag = 0; break;}
+                }
+                else if(flag == 4){
+                    if(tempc == 1){flag = 5;}
+                    else if(tempc == 0 || tempc == 2){flag = 0; break;}
+                }
+                else if(flag == 5){
+                    if(tempc == 1){
+                        //检测到敌-我-我
+                        flag = 0;
+                        enermyX = i-2;
+                        enermyY = cy;
+                        //找出被吃掉的是敌人哪个棋子
+                        for(j=0; j<6; j++){
+                            if(Player2->chessX[j] == enermyX && Player2->chessY[j] == enermyY){
+                                //清除对应棋子的状态，置棋盘上对应位置为1
+                                Player2->chessState[j] = 0;
+                                CB[enermyX][enermyY] = 0;
+                                break;
+                            }
+                        }
+                    }
+                    else if(tempc == 0 || tempc == 2){flag = 0; break;}
+                }
+            }
+        }
+        else if(State == 2){
+            for(i=0; i<5; i++){
+                tempc = CB[i][cy];
+                if(flag == 0){
+                    if(tempc == 2){flag = 1;}
+                    else if(tempc == 1){flag = 4;}
+                }
+                else if(flag == 1){
+                    if(tempc == 2){flag = 2;}
+                    else if(tempc == 0 || tempc == 1){flag = 0; break;}
+                }
+                else if(flag == 2){
+                    if(tempc == 1){
+                        // 识别出我-我-敌
+                        flag = 0;
+                        enermyX = i;
+                        enermyY = cy;
+                        // 找出被吃掉的是敌方的哪个棋子
+                        for(j=0; j<6; j++){
+                            if(Player1->chessX[j]==enermyX && Player1->chessY[j]==enermyY){
+                                // 清除Player2对应棋子的状态，置棋盘上对应位置为1
+                                Player1->chessState[j] = 0;
+                                CB[enermyX][enermyY] = 0;
+                                break;
+                            }
+                        }
+                    }
+                    else if(tempc == 0 || tempc == 2){flag = 0;}
+                }
+                else if(flag == 4){
+                    if(tempc == 2){flag = 5;}
+                    else if(tempc == 0 || tempc == 1){flag = 0; break;}
+                }
+                else if(flag == 5){
+                    if(tempc == 2){
+                        //检测到敌-我-我
+                        flag = 0;
+                        enermyX = i-2;
+                        enermyY = cy;
+                        //找出被吃掉的是敌人哪个棋子
+                        for(j=0; j<6; j++){
+                            if(Player1->chessX[j] == enermyX && Player1->chessY[j] == enermyY){
+                                //清除对应棋子的状态，置棋盘上对应位置为1
+                                Player1->chessState[j] = 0;
+                                CB[enermyX][enermyY] = 0;
+                                break;
+                            }
+                        }
+                    }
+                    else if(tempc == 0 || tempc == 1){flag = 0; break;}
+                }
+            }
+        }
+    } // 到处此已判断了cy所在的那一列是否有能吃掉的棋子，接下来是判断gocy那一列。
+	
+    tempcount = 0;
+    for(i=0; i<5 ;i++){if(CB[i][gocy] != 0){tempcount++;}}
+    flag = 0;
+    if(tempcount == 3){
+        //用有限状态机方法检测是否有我-我-敌，或敌-我-我的模式
+        if(State == 1){
+            for(i=0; i<5; i++){
+                tempc = CB[i][gocy];
+                if(flag == 0){
+                    if(tempc == 1){flag = 1;}
+                    else if(tempc == 2){flag = 4;}
+                }
+                else if(flag == 1){
+                    if(tempc == 1){flag = 2;}
+                    else if(tempc == 0 || tempc == 2){flag = 0; break;}//如果有空隙或者我-敌情况出现，则不存在能吃掉的情况了。
+                }
+                else if(flag == 2){
+                    if(tempc == 2){
+                        // 识别出我-我-敌
+                        flag = 0;
+                        enermyX = i;
+                        enermyY = cy;
+                        // 找出被吃掉的是敌方的哪个棋子
+                        for(j=0; j<6; j++){
+                            if(Player2->chessX[j]==enermyX && Player2->chessY[j]==enermyY){
+                                // 清除Player2对应棋子的状态，置棋盘上对应位置为1
+                                Player2->chessState[j] = 0;
+                                CB[enermyX][enermyY] = 0;
+                                break;
+                            }
+                        }
+                    }
+                    else if(tempc == 0 || tempc == 1){flag = 0; break;}
+                }
+                else if(flag == 4){
+                    if(tempc == 1){flag = 5;}
+                    else if(tempc == 0 || tempc == 2){flag = 0; break;} //检测到敌-我-敌或者敌-我-空，说明不存在可以吃掉的情况。
+                }
+                else if(flag == 5){
+                    if(tempc == 1){
+                        //检测到敌-我-我
+                        flag = 0;
+                        enermyX = i-2;
+                        enermyY = cy;
+                        //找出被吃掉的是敌人哪个棋子
+                        for(j=0; j<6; j++){
+                            if(Player2->chessX[j] == enermyX && Player2->chessY[j] == enermyY){
+                                //清除对应棋子的状态，置棋盘上对应位置为1
+                                Player2->chessState[j] = 0;
+                                CB[enermyX][enermyY] = 0;
+                                break;
+                            }
+                        }
+                    }
+                    else if(tempc == 0 || tempc == 2){flag = 0; break;}
+                }
+            }
+        }
+        else if(State == 2){
+            for(i=0; i<5; i++){
+                tempc = CB[i][cy];
+                if(flag == 0){
+                    if(tempc == 2){flag = 1;}
+                    else if(tempc == 1){flag = 4;}
+                }
+                else if(flag == 1){
+                    if(tempc == 2){flag = 2;}
+                    else if(tempc == 0 || tempc == 1){flag = 0; break;}
+                }
+                else if(flag == 2){
+                    if(tempc == 1){
+                        // 识别出我-我-敌
+                        flag = 0;
+                        enermyX = i;
+                        enermyY = cy;
+                        // 找出被吃掉的是敌方的哪个棋子
+                        for(j=0; j<6; j++){
+                            if(Player1->chessX[j]==enermyX && Player1->chessY[j]==enermyY){
+                                // 清除Player2对应棋子的状态，置棋盘上对应位置为1
+                                Player1->chessState[j] = 0;
+                                CB[enermyX][enermyY] = 0;
+                                break;
+                            }
+                        }
+                    }
+                    else if(tempc == 0 || tempc == 2){flag = 0; break;}
+                }
+                else if(flag == 4){
+                    if(tempc == 2){flag = 5;}
+                    else if(tempc == 0 || tempc == 1){flag = 0; break;}
+                }
+                else if(flag == 5){
+                    if(tempc == 2){
+                        //检测到敌-我-我
+                        flag = 0;
+                        enermyX = i-2;
+                        enermyY = cy;
+                        //找出被吃掉的是敌人哪个棋子
+                        for(j=0; j<6; j++){
+                            if(Player1->chessX[j] == enermyX && Player1->chessY[j] == enermyY){
+                                //清除对应棋子的状态，置棋盘上对应位置为1
+                                Player1->chessState[j] = 0;
+                                CB[enermyX][enermyY] = 0;
+                                break;
+                            }
+                        }
+                    }
+                    else if(tempc == 0 || tempc == 1){flag = 0; break;}
+                }
+            }
+        }
+    } // 到此处已判断了cy、gocy两列的吃棋子状况，接下来判断cx所在的一行的吃棋子状况
+    
+    tempcount = 0;
+    flag = 0;
+    for(i=0; i<4; i++){if(CB[cx][i] != 0){tempcount++;}}
+    if(tempcount == 3){
+        if(State == 1){
+            for(i=0; i<4; i++){
+                tempc = CB[cx][i];
+                if(flag == 0){
+                    if(tempc == 1){flag = 1};
+                    else if(tempc == 2){flag = 4;}
+                }
+                else if(flag == 1){
+                    if(tempc == 1){flag = 2;}
+                    else if(tempc == 0 || tempc == 2){flag = 0; break;}
+                }
+                else if(flag == 2){
+                    if(tempc == 2){
+                        //检测到我-我-敌
+                        flag = 0;
+                        enermyX = cx;
+                        enermyY = i;
+                        //找出吃掉敌方哪个棋子
+                        for(j=0; j<6; j++){
+                            if(Player2->chessX[j]==enermyX && Player2->chessY[j]==enermyY){
+                                //清除玩家对应棋子状态
+                                //清除棋盘对应棋子
+                                Player2->chessState[j] = 0;
+                                CB[enermyX][enermyY] = 0;
+                                break;
+                            }
+                        }
+                    }
+                }
+                else if(flag == 4){
+                    if(tempc == 1){flag = 5;}
+                    else if(tempc == 2 || tempc == 0){flag = 0; break;}
+                }
+                else if(flag == 5){
+                    if(tempc == 1){
+                        flag = 0;
+                        //检测到敌-我-我
+                        enermyX = cx;
+                        enermyY = i;
+                        for(j=0; j<6; j++){
+                            if(Player2->chessX[j]==enermyX && Player2->chessY[j]==enermyY){
+                                Player2->chessState[j] = 0;
+                                CB[enermyX][enermyY] = 0;
+                                break;
+                            }
+                        }
+                    }
+                    else if(tempc == 0 || tempc == 2){flag = 0; break;}
+                }
+            }
+        }
+        else if(State == 2){
+            for(i=0; i<4; i++){
+                tempc = CB[cx][i];
+                if(flag == 0){
+                    if(tempc == 2){flag = 1};
+                    else if(tempc == 1){flag = 4;}
+                }
+                else if(flag == 1){
+                    if(tempc == 2){flag = 2;}
+                    else if(tempc == 0 || tempc == 1){flag = 0; break;}
+                }
+                else if(flag == 2){
+                    if(tempc == 1){
+                        //检测到我-我-敌
+                        flag = 0;
+                        enermyX = cx;
+                        enermyY = i;
+                        //找出吃掉敌方哪个棋子
+                        for(j=0; j<6; j++){
+                            if(Player1->chessX[j]==enermyX && Player1->chessY[j]==enermyY){
+                                //清除玩家对应棋子状态
+                                //清除棋盘对应棋子
+                                Player1->chessState[j] = 0;
+                                CB[enermyX][enermyY] = 0;
+                                break;
+                            }
+                        }
+                    }
+                    else if(tempc == 0 || tempc == 2){flag = 0; break;}
+                }
+                else if(flag == 4){
+                    if(tempc == 2){flag = 5;}
+                    else if(tempc == 1 && tempc == 0){flag = 0; break;}
+                }
+                else if(flag == 5){
+                    if(tempc == 2){
+                        flag = 0;
+                        //检测到敌-我-我
+                        enermyX = cx;
+                        enermyY = i;
+                        for(j=0; j<6; j++){
+                            if(Player1->chessX[j]==enermyX && Player1->chessY[j]==enermyY){
+                                Player1->chessState[j] = 0;
+                                CB[enermyX][enermyY] = 0;
+                                break;
+                            }
+                        }
+                    }
+                    else if(tempc == 0 || tempc == 1){flag = 0; break;}
+                }
+            }
+        }
+    }// 判断了cx所在行的情况，接下来判断gocx所在行的情况
+    
+    tempcount = 0;
+    flag = 0;
+    for(i=0; i<4; i++){if(CB[gocx][i] != 0){tempcount++;}}
+    if(tempcount == 3){
+        if(State == 1){
+            for(i=0; i<4; i++){
+                tempc = CB[gocx][i];
+                if(flag == 0){
+                    if(tempc == 1){flag = 1};
+                    else if(tempc == 2){flag = 4;}
+                }
+                else if(flag == 1){
+                    if(tempc == 1){flag = 2;}
+                    else if(tempc == 0 || tempc == 2){flag = 0; break;}
+                }
+                else if(flag == 2){
+                    if(tempc == 2){
+                        //检测到我-我-敌
+                        flag = 0;
+                        enermyX = cx;
+                        enermyY = i;
+                        //找出吃掉敌方哪个棋子
+                        for(j=0; j<6; j++){
+                            if(Player2->chessX[j]==enermyX && Player2->chessY[j]==enermyY){
+                                //清除玩家对应棋子状态
+                                //清除棋盘对应棋子
+                                Player2->chessState[j] = 0;
+                                CB[enermyX][enermyY] = 0;
+                                break;
+                            }
+                        }
+                    }
+                }
+                else if(flag == 4){
+                    if(tempc == 1){flag = 5;}
+                    else if(tempc == 2 || tempc == 0){flag = 0; break;}
+                }
+                else if(flag == 5){
+                    if(tempc == 1){
+                        flag = 0;
+                        //检测到敌-我-我
+                        enermyX = cx;
+                        enermyY = i;
+                        for(j=0; j<6; j++){
+                            if(Player2->chessX[j]==enermyX && Player2->chessY[j]==enermyY){
+                                Player2->chessState[j] = 0;
+                                CB[enermyX][enermyY] = 0;
+                                break;
+                            }
+                        }
+                    }
+                    else if(tempc == 0 || tempc == 2){flag = 0; break;}
+                }
+            }
+        }
+        else if(State == 2){
+            for(i=0; i<4; i++){
+                tempc = CB[cx][i];
+                if(flag == 0){
+                    if(tempc == 2){flag = 1};
+                    else if(tempc == 1){flag = 4;}
+                }
+                else if(flag == 1){
+                    if(tempc == 2){flag = 2;}
+                    else if(tempc == 0 || tempc == 1){flag = 0; break;}
+                }
+                else if(flag == 2){
+                    if(tempc == 1){
+                        //检测到我-我-敌
+                        flag = 0;
+                        enermyX = cx;
+                        enermyY = i;
+                        //找出吃掉敌方哪个棋子
+                        for(j=0; j<6; j++){
+                            if(Player1->chessX[j]==enermyX && Player1->chessY[j]==enermyY){
+                                //清除玩家对应棋子状态
+                                //清除棋盘对应棋子
+                                Player1->chessState[j] = 0;
+                                CB[enermyX][enermyY] = 0;
+                                break;
+                            }
+                        }
+                    }
+                    else if(tempc == 0 || tempc == 2){flag = 0; break;}
+                }
+                else if(flag == 4){
+                    if(tempc == 2){flag = 5;}
+                    else if(tempc == 1 && tempc == 0){flag = 0; break;}
+                }
+                else if(flag == 5){
+                    if(tempc == 2){
+                        flag = 0;
+                        //检测到敌-我-我
+                        enermyX = cx;
+                        enermyY = i;
+                        for(j=0; j<6; j++){
+                            if(Player1->chessX[j]==enermyX && Player1->chessY[j]==enermyY){
+                                Player1->chessState[j] = 0;
+                                CB[enermyX][enermyY] = 0;
+                                break;
+                            }
+                        }
+                    }
+                    else if(tempc == 0 || tempc == 1){flag = 0; break;}
+                }
+            }
+        }
+    }
+    
+>>>>>>> Stashed changes
 }
 
 /***********************************粗延时函数*************************************/
