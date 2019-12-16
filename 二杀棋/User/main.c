@@ -913,7 +913,7 @@ void EXTI0_IRQHandler (void)
 		{
 			LCD_DrawRect(70,15,80,16,RED);
 			if(State == 1)
-				acknowledge1(player1Turn, Player1);
+				acknowledge(player1Turn, Player1);
 		}
 
 		
