@@ -56,7 +56,7 @@ enum gameState
 	player2Turn,
 	player1Win, //玩家1获胜
 	player2Win,
-};
+}State=1;
 
 struct direction{
 	int dx;
@@ -121,7 +121,6 @@ struct Player player2 = {
 struct Player* Player1 = &player1;
 struct Player* Player2 = &player2;
 
-enum gameState State = 1;
 /********************************************************************************/
 
 int main()
@@ -709,13 +708,14 @@ void choosedir(int direction){
 
 									gocx = tempX + DIR[direction].dx;
 									gocy = tempY + DIR[direction].dy;
-									if( CB[gocx][gocy] == 0 && (0<=gocx<=3) && (0<=gocy<=4) ){
+									/*if( CB[gocx][gocy] == 0 && (0<=gocx<=3) && (0<=gocy<=4) ){
 										//若对应位置没有棋子，且在棋盘内，则可以移动
 										Player1->playerState = Move;//选定了落子的坐标，玩家状态进入Move
 									}
 									else 
 										//否则不移动
 										Player1->playerState = chooseDir;
+								*/
 							}
 					}
 					
@@ -910,23 +910,22 @@ void EXTI1_IRQHandler (void)
 		}
 		else if(key_value == 9){
 			// 显示状态
-			DrawCB();
 			if(State == 1){
-				LCD_DrawAChess(180,20,1,BLUE);
+				LCD_DrawRect(180,40,181,20, BLUE);
 				if(Player1->playerState == chooseChess){
-					LCD_DrawAChess(140,20,1,BLUE);
+					LCD_DrawRect(140,40,141,20,RED);
 				}
 				else if(Player1->playerState == chooseDir){
-					LCD_DrawAChess(140,20,1,BLUE);
+					LCD_DrawRect(140,40,141,20,BLUE);
 				}
 			}
 			else if(State == 2){
-				LCD_DrawAChess(180,20,2,RED);
+				LCD_DrawRect(180,40,181,20,RED);
 				if(Player1->playerState == chooseChess){
-					LCD_DrawAChess(140,20,1,RED);
+					LCD_DrawRect(140,40,141,20,RED);
 				}
 				else if(Player1->playerState == chooseDir){
-					LCD_DrawAChess(140,20,1,RED);
+					LCD_DrawRect(140,40,141,40,BLUE);
 				}
 			}
 		}
