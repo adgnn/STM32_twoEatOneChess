@@ -260,19 +260,6 @@ int main()
 
 	/********************************************************************************/
 
-	/*********************************LED初始化**************************************/
-
-//	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
-//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14 | GPIO_Pin_12 | GPIO_Pin_10 | GPIO_Pin_8;
-//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-//	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-//	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
-//	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-//	GPIO_Init(GPIOE, &GPIO_InitStructure);	
-//	GPIO_ResetBits(GPIOE,GPIO_Pin_14 | GPIO_Pin_12 | GPIO_Pin_10 | GPIO_Pin_8);	
-
-	/********************************************************************************/
-
 	/*********************************按键初始化**************************************/
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
@@ -302,33 +289,6 @@ int main()
 
 	/********************************************************************************/
 
-	/*********************************数码管初始化**************************************/
-//	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC,ENABLE); 
-//	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE,ENABLE); 
-//	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD,ENABLE);
-//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 |GPIO_Pin_14| GPIO_Pin_15;  
-//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-//	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; 
-//	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;  
-//	GPIO_Init(GPIOC,&GPIO_InitStructure);
-
-//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 |GPIO_Pin_7| GPIO_Pin_9 | GPIO_Pin_11 | GPIO_Pin_13 | GPIO_Pin_15;  
-//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-//	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;  
-//	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;  
-//	GPIO_Init(GPIOE,&GPIO_InitStructure); 
-
-//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10 |GPIO_Pin_14|GPIO_Pin_0;  
-//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-//	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; 
-//	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;  
-//	GPIO_Init(GPIOD,&GPIO_InitStructure);
-
-//	GPIO_SetBits(GPIOC, GPIO_Pin_13 |GPIO_Pin_14| GPIO_Pin_15);
-//	GPIO_SetBits(GPIOE, GPIO_Pin_6 |GPIO_Pin_7| GPIO_Pin_9 | GPIO_Pin_11 | GPIO_Pin_13 | GPIO_Pin_15);
-//	GPIO_SetBits(GPIOD, GPIO_Pin_10 |GPIO_Pin_14|GPIO_Pin_0);
-
-	/********************************************************************************/	
 	
 	/*********************************LCD初始化**************************************/
 	/* Enable GPIOs clock */
@@ -522,37 +482,6 @@ int main()
 	LCD_DrawPoint(50,60,RED);
 	DrawCB();
 
-	/*********************************数码管显示*************************************/
-	/*
-	GPIO_ResetBits(GPIOC, GPIO_Pin_15);//DIG1
-	GPIO_ResetBits(GPIOC, GPIO_Pin_14);//DIG2
-	GPIO_ResetBits(GPIOC, GPIO_Pin_13);//DIG3
-	GPIO_ResetBits(GPIOE, GPIO_Pin_6);//DIG4
-	// h 
-	GPIO_ResetBits(GPIOE, GPIO_Pin_11);
-	// 6 cdefg
-	GPIO_ResetBits(GPIOE, GPIO_Pin_15 | GPIO_Pin_7 | GPIO_Pin_13 | GPIO_Pin_9);
-	GPIO_ResetBits(GPIOD, GPIO_Pin_10 | GPIO_Pin_0);
-	// 5 acdfg
-	GPIO_ResetBits(GPIOE, GPIO_Pin_15 | GPIO_Pin_7 | GPIO_Pin_13 | GPIO_Pin_9);
-	GPIO_ResetBits(GPIOD, GPIO_Pin_0);
-	// 4 bcfg
-	GPIO_ResetBits(GPIOE, GPIO_Pin_7 | GPIO_Pin_9);
-	GPIO_ResetBits(GPIOD, GPIO_Pin_14 | GPIO_Pin_0);
-	// 3 abcdg
-	GPIO_ResetBits(GPIOE, GPIO_Pin_15 | GPIO_Pin_7 | GPIO_Pin_13);
-	GPIO_ResetBits(GPIOD, GPIO_Pin_14 | GPIO_Pin_0);
-	// 2 abdeg
-	GPIO_ResetBits(GPIOE, GPIO_Pin_15 | GPIO_Pin_13);
-	GPIO_ResetBits(GPIOD, GPIO_Pin_14 | GPIO_Pin_10 | GPIO_Pin_0);
-	// 1 bc
-	GPIO_ResetBits(GPIOE, GPIO_Pin_7);
-	GPIO_ResetBits(GPIOD, GPIO_Pin_14);
-	// 0 abcdef
-	GPIO_ResetBits(GPIOE, GPIO_Pin_15 | GPIO_Pin_7 | GPIO_Pin_13 | GPIO_Pin_9);
-	GPIO_ResetBits(GPIOD, GPIO_Pin_14 | GPIO_Pin_10);
-	*/
-	/********************************************************************************/	
 
 	while(1)
 	{
