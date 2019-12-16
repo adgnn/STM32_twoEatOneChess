@@ -649,49 +649,50 @@ void LCD_DrawAChess(int x, int y, int num, uint16_t GRB)
     }
 }
 
+
 /* 选棋子 */
 void choosechess(int number){
 	switch(State){
-			case 1: //玩家1的回合
-					if(Player1->playerState == chooseChess){
-							if(Player1->chessState[number-1] == 1){
-									// 若玩家1的第1个棋子还没被吃
-									whichChess = number;//更新选定棋子编号
-									cx = Player1 -> chessX[number-1];
-									cy = Player1 -> chessY[number-1]; //更新全局变量cx、cy为玩家1的第1个棋子的坐标
-									Player1 -> playerState = chooseDir; //将玩家1的状态更新为待选方向
-							}
-					}
-					else{
-							//玩家1已经被吃，重新选棋子
-							
-					}
-					break;
+		case 1: //玩家1的回合
+			if(Player1->playerState == chooseChess){
+				if(Player1->chessState[number-1] == 1){
+					// 若玩家1的第1个棋子还没被吃
+					whichChess = number;//更新选定棋子编号
+					cx = Player1 -> chessX[number-1];
+					cy = Player1 -> chessY[number-1]; //更新全局变量cx、cy为玩家1的第1个棋子的坐标
+					Player1 -> playerState = chooseDir; //将玩家1的状态更新为待选方向
+				}
+			}
+			else{
+				//玩家1已经被吃，重新选棋子
 					
-			case 2: //玩家2的回合
-					if(Player2->playerState == chooseChess){
-							if(Player2->chessState[number-1] == 1){
-									// 若玩家2的第1个棋子还没被吃
-									whichChess = number;//更新选定棋子编号
-									cx = Player2 -> chessX[number-1];
-									cy = Player2 -> chessY[number-1]; //更新全局变量cx、cy为玩家1的第1个棋子的坐标
-									Player2 -> playerState = chooseDir; //将玩家1的状态更新为待选方向
-							}
-					}
-					else{
-							//玩家2已经被吃，重新选棋子
-							
-					}
-					break;	
+			}
+		break;
+				
+		case 2: //玩家2的回合
+			if(Player2->playerState == chooseChess){
+				if(Player2->chessState[number-1] == 1){
+					// 若玩家2的第1个棋子还没被吃
+					whichChess = number;//更新选定棋子编号
+					cx = Player2 -> chessX[number-1];
+					cy = Player2 -> chessY[number-1]; //更新全局变量cx、cy为玩家1的第1个棋子的坐标
+					Player2 -> playerState = chooseDir; //将玩家1的状态更新为待选方向
+				}
+			}
+			else{
+				//玩家2已经被吃，重新选棋子
 					
-			case 3:
-					//玩家1获胜
-					break;
-			case 4:
-					//玩家2获胜
-					break;
-			default:
-					break;
+			}
+			break;	
+				
+		case 3:
+			//玩家1获胜
+			break;
+		case 4:
+			//玩家2获胜
+			break;
+		default:
+			break;
 	}
 }
 
@@ -700,6 +701,7 @@ void choosechess(int number){
 void choosedir(int direction){
 	int tempX,tempY;
 	switch(State){
+<<<<<<< HEAD
 			case 1:
 					if(Player1->playerState == chooseDir){
 							if(Player1->chessState[whichChess-1] == 1){
@@ -743,18 +745,54 @@ void choosedir(int direction){
 											
 									}
 							}
+=======
+		case 1:
+			if(Player1->playerState == chooseDir){
+				if(Player1->chessState[whichChess-1] == 1){
+					tempX = cx ;
+					tempY = cy ;
+
+					gocx = tempX + DIR[direction].dx;
+					gocy = tempY + DIR[direction].dy;
+					if( CB[gocx][gocy] == 0 && (0<=gocx<=3) && (0<=gocy<=4) ){
+						//若对应位置没有棋子，且在棋盘内，则可以移动
+						Player1->playerState = Move;//选定了落子的坐标，玩家状态进入Move
 					}
+					else 
+						//否则不移动
+						Player1->playerState = chooseDir;
+				}
+			}
+				
+		case 2:
+			if(Player2->playerState == chooseDir){
+				if(Player2->chessState[whichChess-1] == 1){
+					tempX = cx ;
+					tempY = cy ;
+
+					gocx = tempX + DIR[direction].dx;
+					gocy = tempY + DIR[direction].dy;
+					if( CB[gocx][gocy] == 0 && (0<=gocx<=3) && (0<=gocy<=4) ){
+						//若对应位置没有棋子，且在棋盘内，则可以移动
+						Player2->playerState = Move;//选定了落子的坐标，玩家状态进入Move
+>>>>>>> 52b67041114986a55d804881ed55d625e057b9db
+					}
+					else 
+						//否则不移动
+						Player2->playerState = chooseDir;
+				}
+			}
 
 
-			case 3:
+		case 3:
 
-					break;
-			
-			case 4:
+			break;
+		
+		case 4:
 
-					break;
-			default:
-					break;
+			break;
+		default:
+			break;
 	}
 }
 
@@ -763,6 +801,7 @@ void choosedir(int direction){
 void acknowledge(){
 	switch(State){
 			case 1:
+<<<<<<< HEAD
 					if(Player1->playerState == Move){
 							//移动player1的某个子
 							LCD_DrawAChess(cx, cy, whichChess, WHITE);
@@ -787,15 +826,52 @@ void acknowledge(){
 							Player2 -> chessX[whichChess-1] = gocx;
 							Player2 -> chessY[whichChess-1] = gocy;
 					}
+=======
+				if(Player1->playerState == Move){
+					//移动player1的某个子
+					LCD_DrawAChess(cx, cy, whichChess, WHITE);
+					LCD_DrawAChess(gocx, gocy, whichChess, BLUE);
+					//更新CB[5][4]
+					CB[cx][cy] = 0;//移动前位置赋为0
+					CB[gocx][gocy] = 1;//移动后位置赋为1
+					//更新Player1对应的chessX、chessY
+					Player1 -> chessX[whichChess-1] = gocx;
+					Player1 -> chessY[whichChess-1] = gocy;
+					//转换状态
+					State = 2;
+					Player2->playerState = chooseChess;
+				}
+					
+			case 2:
+				if(Player2->playerState == Move){
+					//移动player1的某个子
+					LCD_DrawAChess(cx, cy, whichChess, WHITE);
+					LCD_DrawAChess(gocx, gocy, whichChess, GREEN);
+					//更新CB[5][4]
+					CB[cx][cy] = 0;//移动前位置赋为0
+					CB[gocx][gocy] = 1;//移动后位置赋为1
+					//更新Player1对应的chessX、chessY
+					Player2 -> chessX[whichChess-1] = gocx;
+					Player2 -> chessY[whichChess-1] = gocy;
+					//转换状态
+					State = 1;
+					Player1->playerState = chooseChess;
+				}
+>>>>>>> 52b67041114986a55d804881ed55d625e057b9db
 					
 			case 3:
 
-					break;
+				break;
 			case 4:
 
-					break;
+				break;
 			default:
+<<<<<<< HEAD
 					break;
+=======
+				break;
+		}
+>>>>>>> 52b67041114986a55d804881ed55d625e057b9db
 	}
 }
 
