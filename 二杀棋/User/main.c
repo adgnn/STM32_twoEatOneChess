@@ -827,33 +827,33 @@ void EXTI3_IRQHandler (void)
 		{
 			LCD_DrawRect(10, 15, 20, 16, GREEN);
 			if(State == 1)
-				choosechess1(1,player1Turn,Player1);
+				choosechess(1);
 			else
-				choosechess2(1,player2Turn,Player2);
+				choosechess(1);
 		}
 		else if(key_value == 6)
 		{
 			LCD_DrawRect(25, 15, 35, 16, BLUE);
 			if(State == 1)
-				choosechess1(5,player1Turn,Player1);
+				choosechess(5);
 			else
-				choosechess2(5,player2Turn,Player2);
+				choosechess(5);
 		}
 		else if(key_value == 10)
 		{
 			LCD_DrawRect(40, 15, 50, 16, RED);
 			if(State == 1)
-				choosedir1(UP,player1Turn,Player1);
+				choosedir(UP);
 			else
-				choosedir2(UP,player2Turn,Player2);
+				choosedir(UP);
 		}
 		else if(key_value == 14)
 		{
 			LCD_DrawRect(55, 15, 65, 16, GREEN);
 			if(State == 1)
-				choosedir1(DOWN,player1Turn,Player1);
+				choosedir(DOWN);
 			else
-				choosedir2(DOWN,player2Turn,Player2);
+				choosedir(DOWN);
 		}
 	}
 	EXTI_ClearITPendingBit(EXTI_Line3);
@@ -915,6 +915,28 @@ void EXTI1_IRQHandler (void)
 		if(key_value == 5)
 		{
 
+		}
+		else if(key_value == 9){
+			// ÏÔÊ¾×´Ì¬
+			DrawCB();
+			if(State == 1){
+				LCD_DrawAChess(180,20,1,BLUE);
+				if(Player1->playerState == chooseChess){
+					LCD_DrawAChess(140,20,1,BLUE);
+				}
+				else if(Player1->playerState == chooseDir){
+					LCD_DrawAChess(140,20,1,BLUE);
+				}
+			}
+			else if(State == 2){
+				LCD_DrawAChess(180,20,2,RED);
+				if(Player1->playerState == chooseChess){
+					LCD_DrawAChess(140,20,1,RED);
+				}
+				else if(Player1->playerState == chooseDir){
+					LCD_DrawAChess(140,20,1,RED);
+				}
+			}
 		}
 	}
 	EXTI_ClearITPendingBit(EXTI_Line1);
