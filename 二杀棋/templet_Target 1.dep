@@ -1,5 +1,5 @@
 Dependencies for Project 'templet', Target 'Target 1': (DO NOT MODIFY !)
-F (.\User\main.c)(0x5DF6CF55)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I .\User -I .\DRIVER\CMSIS\Include -I .\DRIVER\CMSIS\Device\ST\STM32F2xx\Include -I .\DRIVER\STM32F2xx_StdPeriph_Driver\inc-I.\RTE\_Target_1-IC:\Users\Zhenwei\AppData\Local\Arm\Packs\ARM\CMSIS\5.5.1\CMSIS\Core\Include-IC:\Users\Zhenwei\AppData\Local\Arm\Packs\Keil\STM32F2xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F2xx\Include-D__UVISION_VERSION="528" -D_RTE_ -DSTM32F207xx -DUSE_STDPERIPH_DRIVER-o .\main.o --omf_browse .\main.crf --depend .\main.d)
+F (.\User\main.c)(0x5DF6D5F1)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I .\User -I .\DRIVER\CMSIS\Include -I .\DRIVER\CMSIS\Device\ST\STM32F2xx\Include -I .\DRIVER\STM32F2xx_StdPeriph_Driver\inc-I.\RTE\_Target_1-IC:\Users\Zhenwei\AppData\Local\Arm\Packs\ARM\CMSIS\5.5.1\CMSIS\Core\Include-IC:\Users\Zhenwei\AppData\Local\Arm\Packs\Keil\STM32F2xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F2xx\Include-D__UVISION_VERSION="528" -D_RTE_ -DSTM32F207xx -DUSE_STDPERIPH_DRIVER-o .\main.o --omf_browse .\main.crf --depend .\main.d)
 I (.\DRIVER\CMSIS\Device\ST\STM32F2xx\Include\stm32f2xx.h)(0x5DF6CF54)
 I (.\DRIVER\CMSIS\Include\core_cm3.h)(0x5DF6CF54)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5CEB79E2)

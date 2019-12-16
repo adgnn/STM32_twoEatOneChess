@@ -107,8 +107,6 @@ int whichChess; //选中棋子号码
 
 int CB[5][4] ={ {1,1,1,1}, {1,0,0,1}, {0,0,0,0}, {1,0,0,1}, {1,1,1,1} };
 int i;
-int Turn = 0;
-int Win;
 	
 struct Player player1 = {
 {1,1,1,1,1,1}, 
@@ -122,6 +120,8 @@ struct Player player2 = {
 1};
 struct Player* Player1 = &player1;
 struct Player* Player2 = &player2;
+
+enum gameState State = 1;
 /********************************************************************************/
 
 int main()
@@ -262,14 +262,14 @@ int main()
 
 	/*********************************LED初始化**************************************/
 
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14 | GPIO_Pin_12 | GPIO_Pin_10 | GPIO_Pin_8;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOE, &GPIO_InitStructure);	
-	GPIO_ResetBits(GPIOE,GPIO_Pin_14 | GPIO_Pin_12 | GPIO_Pin_10 | GPIO_Pin_8);	
+//	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
+//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14 | GPIO_Pin_12 | GPIO_Pin_10 | GPIO_Pin_8;
+//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+//	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+//	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
+//	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+//	GPIO_Init(GPIOE, &GPIO_InitStructure);	
+//	GPIO_ResetBits(GPIOE,GPIO_Pin_14 | GPIO_Pin_12 | GPIO_Pin_10 | GPIO_Pin_8);	
 
 	/********************************************************************************/
 
@@ -520,8 +520,6 @@ int main()
    	
 	LCD_Color_Fill(0,0,239,319,WHITE);
 	LCD_DrawPoint(50,60,RED);
-	clearAll();
-	DrawCBGrid();
 	DrawCB();
 
 	/*********************************数码管显示*************************************/
@@ -598,25 +596,6 @@ int main()
 			case  0x0043:  key_value=    14 ;                break;
 			case   0x000B:  key_value=   15;               break;
 		}	
-
-		GPIO_SetBits(GPIOC, GPIO_Pin_13 |GPIO_Pin_14| GPIO_Pin_15);
-		GPIO_SetBits(GPIOE, GPIO_Pin_6 |GPIO_Pin_7| GPIO_Pin_9 | GPIO_Pin_11 | GPIO_Pin_13 | GPIO_Pin_15);
-		GPIO_SetBits(GPIOD, GPIO_Pin_10 |GPIO_Pin_14|GPIO_Pin_0);
-
-		GPIO_ResetBits(GPIOC, GPIO_Pin_14);//DIG2
-		GPIO_ResetBits(GPIOE, GPIO_Pin_15 | GPIO_Pin_7 | GPIO_Pin_13 | GPIO_Pin_9);
-		GPIO_ResetBits(GPIOD, GPIO_Pin_10 | GPIO_Pin_0);
-		Delay_ms(20);
-
-
-		GPIO_SetBits(GPIOC, GPIO_Pin_13 |GPIO_Pin_14| GPIO_Pin_15);
-		GPIO_SetBits(GPIOE, GPIO_Pin_6 |GPIO_Pin_7| GPIO_Pin_9 | GPIO_Pin_11 | GPIO_Pin_13 | GPIO_Pin_15);
-		GPIO_SetBits(GPIOD, GPIO_Pin_10 |GPIO_Pin_14|GPIO_Pin_0);
-
-		GPIO_ResetBits(GPIOE, GPIO_Pin_6);//DIG4
-		GPIO_ResetBits(GPIOE, GPIO_Pin_15 | GPIO_Pin_7 | GPIO_Pin_13 | GPIO_Pin_9);
-		GPIO_ResetBits(GPIOD, GPIO_Pin_0);
-		Delay_ms(20);
 
 	}
 }
@@ -920,7 +899,7 @@ void acknowledge2(enum gameState state, struct Player* Player2){
 					if(Player2->playerState == Move){
 							//移动player1的某个子
 							LCD_DrawAChess(cx, cy, whichChess, WHITE);
-							LCD_DrawAChess(gocx, gocy, whichChess, BLUE);
+							LCD_DrawAChess(gocx, gocy, whichChess, GREEN);
 							//更新CB[5][4]
 							CB[cx][cy] = 0;//移动前位置赋为0
 							CB[gocx][gocy] = 1;//移动后位置赋为1
@@ -955,29 +934,32 @@ void EXTI3_IRQHandler (void)
 	{
 		if(key_value == 2)
 		{
-			 GPIO_ToggleBits(GPIOE,GPIO_Pin_14);
-			if(Turn == 0)
+			LCD_DrawRect(10, 15, 20, 16, GREEN);
+			if(State == 1)
 				choosechess1(1,player1Turn,Player1);
 			else
 				choosechess2(1,player2Turn,Player2);
 		}
 		else if(key_value == 6)
 		{
-			if(Turn == 0)
+			LCD_DrawRect(25, 15, 35, 16, BLUE);
+			if(State == 1)
 				choosechess1(5,player1Turn,Player1);
 			else
 				choosechess2(5,player2Turn,Player2);
 		}
 		else if(key_value == 10)
 		{
-			if(Turn == 0)
+			LCD_DrawRect(40, 15, 50, 16, RED);
+			if(State == 1)
 				choosedir1(UP,player1Turn,Player1);
 			else
 				choosedir2(UP,player2Turn,Player2);
 		}
 		else if(key_value == 14)
 		{
-			if(Turn == 0)
+			LCD_DrawRect(55, 15, 65, 16, GREEN);
+			if(State == 1)
 				choosedir1(DOWN,player1Turn,Player1);
 			else
 				choosedir2(DOWN,player2Turn,Player2);
@@ -993,31 +975,19 @@ void EXTI9_5_IRQHandler (void)
 	{
 		if(key_value == 3)
 		{
-			if(Turn == 0)
-				choosechess1(2,player1Turn,Player1);
-			else
-				choosechess2(2,player2Turn,Player2);
+
 		}
 		else if(key_value == 7)
 		{
-			if(Turn == 0)
-				choosechess1(6,player1Turn,Player1);
-			else
-				choosechess2(6,player2Turn,Player2);
+
 		}
 		else if(key_value == 11)
 		{
-			if(Turn == 0)
-				choosedir1(LEFT,player1Turn,Player1);
-			else
-				choosedir2(LEFT,player2Turn,Player2);
+
 		}
 		else if(key_value == 15)
 		{
-			if(Turn == 0)
-				choosedir1(RIGHT,player1Turn,Player1);
-			else
-				choosedir2(RIGHT,player2Turn,Player2);
+
 		}
 
 	}
@@ -1032,17 +1002,13 @@ void EXTI0_IRQHandler (void)
 	{
 		if(key_value == 4)
 		{
-			if(Turn == 0)
-				choosechess1(3,player1Turn,Player1);
-			else
-				choosechess2(3,player2Turn,Player2);
+
 		}
 		else if(key_value == 8)
 		{
-			if(Turn == 0)
+			LCD_DrawRect(70,15,80,16,RED);
+			if(State == 1)
 				acknowledge1(player1Turn, Player1);
-			else
-				acknowledge2(player2Turn, Player2);
 		}
 
 		
@@ -1057,10 +1023,7 @@ void EXTI1_IRQHandler (void)
 	{
 		if(key_value == 5)
 		{
-			if(Turn == 0)
-				choosechess1(4,player1Turn,Player1);
-			else
-				choosechess2(4,player2Turn,Player2);
+
 		}
 	}
 	EXTI_ClearITPendingBit(EXTI_Line1);
