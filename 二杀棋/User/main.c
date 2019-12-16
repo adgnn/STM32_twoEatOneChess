@@ -724,16 +724,24 @@ void choosedir(int direction){
 							if(Player2->chessState[whichChess-1] == 1){
 									tempX = cx ;
 									tempY = cy ;
-
-									gocx = tempX + DIR[direction].dx;
-									gocy = tempY + DIR[direction].dy;
-									if( CB[gocx][gocy] == 0 && (0<=gocx<=3) && (0<=gocy<=4) ){
-										//若对应位置没有棋子，且在棋盘内，则可以移动
-										Player2->playerState = Move;//选定了落子的坐标，玩家状态进入Move
+									if(cx >= 0){
+											// 若没有数组越界
+											if(CB[tempX][tempY] == 0){
+													//若对应位置没有棋子，可以移动
+													gocx = tempX + DIR[direction].dx;
+													gocy = tempY + DIR[direction].dy;
+													//选定了落子的坐标，玩家状态进入Move
+													Player2->playerState = Move;
+											}
+											else{
+													//有棋子冲突报错，重新选方向
+													
+											}
 									}
-									else 
-										//否则不移动
-										Player2->playerState = chooseDir;
+									else{
+											//越界报错，重新选方向
+											
+									}
 							}
 					}
 
@@ -752,39 +760,33 @@ void choosedir(int direction){
 
 
 /* 确认落子 */
-	void acknowledge(){
-		switch(State){
+void acknowledge(){
+	switch(State){
 			case 1:
-				if(Player1->playerState == Move){
-					//移动player1的某个子
-					LCD_DrawAChess(cx, cy, whichChess, WHITE);
-					LCD_DrawAChess(gocx, gocy, whichChess, BLUE);
-					//更新CB[5][4]
-					CB[cx][cy] = 0;//移动前位置赋为0
-					CB[gocx][gocy] = 1;//移动后位置赋为1
-					//更新Player1对应的chessX、chessY
-					Player1 -> chessX[whichChess-1] = gocx;
-					Player1 -> chessY[whichChess-1] = gocy;
-					//转换状态
-					State = 2;
-					Player1->playerState = chooseChess;
-				}
+					if(Player1->playerState == Move){
+							//移动player1的某个子
+							LCD_DrawAChess(cx, cy, whichChess, WHITE);
+							LCD_DrawAChess(gocx, gocy, whichChess, BLUE);
+							//更新CB[5][4]
+							CB[cx][cy] = 0;//移动前位置赋为0
+							CB[gocx][gocy] = 1;//移动后位置赋为1
+							//更新Player1对应的chessX、chessY
+							Player1 -> chessX[whichChess-1] = gocx;
+							Player1 -> chessY[whichChess-1] = gocy;
+					}
 					
 			case 2:
-				if(Player2->playerState == Move){
-					//移动player1的某个子
-					LCD_DrawAChess(cx, cy, whichChess, WHITE);
-					LCD_DrawAChess(gocx, gocy, whichChess, GREEN);
-					//更新CB[5][4]
-					CB[cx][cy] = 0;//移动前位置赋为0
-					CB[gocx][gocy] = 1;//移动后位置赋为1
-					//更新Player1对应的chessX、chessY
-					Player2 -> chessX[whichChess-1] = gocx;
-					Player2 -> chessY[whichChess-1] = gocy;
-					//转换状态
-					State = 1;
-					Player2->playerState = chooseChess;
-				}
+					if(Player2->playerState == Move){
+							//移动player1的某个子
+							LCD_DrawAChess(cx, cy, whichChess, WHITE);
+							LCD_DrawAChess(gocx, gocy, whichChess, GREEN);
+							//更新CB[5][4]
+							CB[cx][cy] = 0;//移动前位置赋为0
+							CB[gocx][gocy] = 1;//移动后位置赋为1
+							//更新Player1对应的chessX、chessY
+							Player2 -> chessX[whichChess-1] = gocx;
+							Player2 -> chessY[whichChess-1] = gocy;
+					}
 					
 			case 3:
 
@@ -794,8 +796,8 @@ void choosedir(int direction){
 					break;
 			default:
 					break;
-		}
 	}
+}
 
 /***********************************粗延时函数*************************************/
 vu16 Delay_ms(vu16 Count)			                           			        
@@ -856,35 +858,19 @@ void EXTI9_5_IRQHandler (void)
 	{
 		if(key_value == 3)
 		{
-			LCD_DrawRect(10, 25, 20, 26, BLUE);
-			if(State == 1)
-				choosechess(2);
-			else
-				choosechess(2);
+
 		}
 		else if(key_value == 7)
 		{
-			LCD_DrawRect(20, 25, 30, 26, RED);
-			if(State == 1)
-				choosechess(6);
-			else
-				choosechess(6);
+
 		}
 		else if(key_value == 11)
 		{
-			LCD_DrawRect(30, 25, 40, 26, BLUE);
-			if(State == 1)
-				choosedir(LEFT);
-			else
-				choosedir(LEFT);
+
 		}
 		else if(key_value == 15)
 		{
-			LCD_DrawRect(40, 25, 50, 26, RED);
-			if(State == 1)
-				choosedir(RIGHT);
-			else
-				choosedir(RIGHT);
+
 		}
 
 	}
@@ -899,17 +885,13 @@ void EXTI0_IRQHandler (void)
 	{
 		if(key_value == 4)
 		{
-			LCD_DrawRect(10, 35, 20, 36, BLUE);
-			if(State == 1)
-				choosechess(3);
-			else
-				choosechess(3);
+
 		}
 		else if(key_value == 8)
 		{
-			LCD_DrawRect(70,35,80,36,RED);
+			LCD_DrawRect(70,15,80,16,RED);
 			if(State == 1)
-				acknowledge();
+				acknowledge(player1Turn, Player1);
 		}
 
 		
@@ -924,30 +906,26 @@ void EXTI1_IRQHandler (void)
 	{
 		if(key_value == 5)
 		{
-			LCD_DrawRect(10, 45, 20, 46, BLUE);
-			if(State == 1)
-				choosechess(4);
-			else
-				choosechess(4);
+
 		}
 		else if(key_value == 9){
 			// 显示状态
 			if(State == 1){
-				LCD_DrawRect(180,40,181,20, BLUE);
+				LCD_DrawRect(180,20,181,40, BLUE);
 				if(Player1->playerState == chooseChess){
-					LCD_DrawRect(140,40,141,20,RED);
+					LCD_DrawRect(140,20,141,40,RED);
 				}
 				else if(Player1->playerState == chooseDir){
-					LCD_DrawRect(140,40,141,20,BLUE);
+					LCD_DrawRect(140,20,141,40,BLUE);
 				}
 			}
 			else if(State == 2){
-				LCD_DrawRect(180,40,181,20,RED);
+				LCD_DrawRect(180,20,181,40,RED);
 				if(Player1->playerState == chooseChess){
-					LCD_DrawRect(140,40,141,20,RED);
+					LCD_DrawRect(140,20,141,40,RED);
 				}
 				else if(Player1->playerState == chooseDir){
-					LCD_DrawRect(140,40,141,40,BLUE);
+					LCD_DrawRect(140,20,141,40,BLUE);
 				}
 			}
 		}
