@@ -478,8 +478,6 @@ int main()
 	LCD_IO_WriteReg(0x29); //display on
 	/********************************************************************************/
    	
-	LCD_Color_Fill(0,0,239,319,WHITE);
-	LCD_DrawPoint(50,60,RED);
 	DrawCB();
 
 
@@ -558,11 +556,6 @@ void clearAll()
 void DrawCBGrid()
 {
     /* 外框 */
-    //************注释的x和y反过来了****************
-    // (80,20) - (240,19)
-    // (80,20) - (80, 219)
-    // (240, 20) - (240, 221)
-    /// (80, 220) - (240, 221)
 
     LCD_DrawRect(19,80,19,240,RED);//下方横线
     LCD_DrawRect(20,80,219,80,RED);//右侧竖线
@@ -570,10 +563,6 @@ void DrawCBGrid()
     LCD_DrawRect(220,80,221,240,RED);//上方横线
     /* 内线 */
     // 横线
-    // (80, 60) - (240, 61)
-    // (80, 100) - (240, 101)
-    // (80, 140) - (240, 141)
-    // (80, 180) - (240, 181)
 
     LCD_DrawRect(60,80,61,240,RED);
     LCD_DrawRect(100,80,101,240,RED);
@@ -581,9 +570,6 @@ void DrawCBGrid()
     LCD_DrawRect(180,80,181,240,RED);
 
     // 竖线
-    // (120, 20) - (121, 220)
-    // (160, 20) - (161, 220)
-    // (200, 20) - (201, 220)
     LCD_DrawRect(20,120,220,121,RED);
     LCD_DrawRect(20,160,220,161,RED);
     LCD_DrawRect(20,200,220,201,RED);
@@ -833,33 +819,33 @@ void EXTI3_IRQHandler (void)
 		{
 			LCD_DrawRect(10, 15, 20, 16, GREEN);
 			if(State == 1)
-				choosechess1(1,player1Turn,Player1);
+				choosechess(1);
 			else
-				choosechess2(1,player2Turn,Player2);
+				choosechess(1);
 		}
 		else if(key_value == 6)
 		{
 			LCD_DrawRect(25, 15, 35, 16, BLUE);
 			if(State == 1)
-				choosechess1(5,player1Turn,Player1);
+				choosechess(5);
 			else
-				choosechess2(5,player2Turn,Player2);
+				choosechess(5);
 		}
 		else if(key_value == 10)
 		{
 			LCD_DrawRect(40, 15, 50, 16, RED);
 			if(State == 1)
-				choosedir1(UP,player1Turn,Player1);
+				choosedir(UP);
 			else
-				choosedir2(UP,player2Turn,Player2);
+				choosedir(UP);
 		}
 		else if(key_value == 14)
 		{
 			LCD_DrawRect(55, 15, 65, 16, GREEN);
 			if(State == 1)
-				choosedir1(DOWN,player1Turn,Player1);
+				choosedir(DOWN);
 			else
-				choosedir2(DOWN,player2Turn,Player2);
+				choosedir(DOWN);
 		}
 	}
 	EXTI_ClearITPendingBit(EXTI_Line3);
@@ -921,6 +907,28 @@ void EXTI1_IRQHandler (void)
 		if(key_value == 5)
 		{
 
+		}
+		else if(key_value == 9){
+			// 显示状态
+			DrawCB();
+			if(State == 1){
+				LCD_DrawAChess(180,20,1,BLUE);
+				if(Player1->playerState == chooseChess){
+					LCD_DrawAChess(140,20,1,BLUE);
+				}
+				else if(Player1->playerState == chooseDir){
+					LCD_DrawAChess(140,20,1,BLUE);
+				}
+			}
+			else if(State == 2){
+				LCD_DrawAChess(180,20,2,RED);
+				if(Player1->playerState == chooseChess){
+					LCD_DrawAChess(140,20,1,RED);
+				}
+				else if(Player1->playerState == chooseDir){
+					LCD_DrawAChess(140,20,1,RED);
+				}
+			}
 		}
 	}
 	EXTI_ClearITPendingBit(EXTI_Line1);

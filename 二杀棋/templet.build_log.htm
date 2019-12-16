@@ -1,0 +1,127 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¦ÌVision V5.28.0.0
+Copyright (C) 2019 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information:  ,  , LIC=TIVNN-YUTE9-NNHAF-62GD5-FD8AM-Y8K9P
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.28.0.0
+Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 6 (build 750)
+Assembler:       Armasm.exe V5.06 update 6 (build 750)
+Linker/Locator:  ArmLink.exe V5.06 update 6 (build 750)
+Library Manager: ArmAr.exe V5.06 update 6 (build 750)
+Hex Converter:   FromElf.exe V5.06 update 6 (build 750)
+CPU DLL:         SARMCM3.DLL V5.28.0.0
+Dialog DLL:      DCM.DLL V1.17.3.0
+Target DLL:      Segger\JL2CM3.dll V2.99.23.0
+Dialog DLL:      TCM.DLL V1.36.2.0
+ 
+<h2>Project:</h2>
+C:\Users\adgnn\Documents\GitHub\STM32_twoEatOneChess\¶þÉ±Æå\templet.uvprojx
+Project File Date:  12/16/2019
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+Rebuild target 'Target 1'
+compiling stm32f2xx_it.c...
+compiling misc.c...
+compiling main.c...
+User\main.c(85): warning:  #1295-D: Deprecated declaration DrawCBGrid - give arg types
+  void DrawCBGrid();
+User\main.c(87): warning:  #1295-D: Deprecated declaration clearAll - give arg types
+  void clearAll();
+User\main.c(89): warning:  #1295-D: Deprecated declaration DrawCB - give arg types
+  void DrawCB();
+User\main.c(124): warning:  #188-D: enumerated type mixed with another type
+  enum gameState State = 1;
+User\main.c(830): warning:  #223-D: function "choosechess1" declared implicitly
+  				choosechess1(1,player1Turn,Player1);
+User\main.c(832): warning:  #223-D: function "choosechess2" declared implicitly
+  				choosechess2(1,player2Turn,Player2);
+User\main.c(838): warning:  #223-D: function "choosechess1" declared implicitly
+  				choosechess1(5,player1Turn,Player1);
+User\main.c(840): warning:  #223-D: function "choosechess2" declared implicitly
+  				choosechess2(5,player2Turn,Player2);
+User\main.c(846): warning:  #223-D: function "choosedir1" declared implicitly
+  				choosedir1(UP,player1Turn,Player1);
+User\main.c(848): warning:  #223-D: function "choosedir2" declared implicitly
+  				choosedir2(UP,player2Turn,Player2);
+User\main.c(854): warning:  #223-D: function "choosedir1" declared implicitly
+  				choosedir1(DOWN,player1Turn,Player1);
+User\main.c(856): warning:  #223-D: function "choosedir2" declared implicitly
+  				choosedir2(DOWN,player2Turn,Player2);
+User\main.c(902): warning:  #140-D: too many arguments in function call
+  				acknowledge(player1Turn, Player1);
+User\main.c: 13 warnings, 0 errors
+compiling stm32f2xx_adc.c...
+compiling stm32f2xx_crc.c...
+compiling stm32f2xx_can.c...
+compiling stm32f2xx_cryp_des.c...
+compiling stm32f2xx_cryp.c...
+compiling stm32f2xx_cryp_aes.c...
+compiling stm32f2xx_dbgmcu.c...
+compiling stm32f2xx_dac.c...
+compiling stm32f2xx_cryp_tdes.c...
+compiling stm32f2xx_exti.c...
+compiling stm32f2xx_dcmi.c...
+compiling stm32f2xx_dma.c...
+compiling stm32f2xx_fsmc.c...
+compiling stm32f2xx_gpio.c...
+compiling stm32f2xx_flash.c...
+compiling stm32f2xx_hash_sha1.c...
+compiling stm32f2xx_hash_md5.c...
+compiling stm32f2xx_hash.c...
+compiling stm32f2xx_iwdg.c...
+compiling stm32f2xx_pwr.c...
+compiling stm32f2xx_i2c.c...
+compiling stm32f2xx_rng.c...
+compiling stm32f2xx_rcc.c...
+compiling stm32f2xx_rtc.c...
+compiling stm32f2xx_syscfg.c...
+compiling stm32f2xx_spi.c...
+compiling stm32f2xx_sdio.c...
+compiling stm32f2xx_wwdg.c...
+compiling stm32f2xx_usart.c...
+compiling stm32f2xx_tim.c...
+assembling startup_stm32f2xx.s...
+compiling system_stm32f2xx.c...
+linking...
+.\templet.axf: Error: L6218E: Undefined symbol choosechess1 (referred from main.o).
+.\templet.axf: Error: L6218E: Undefined symbol choosechess2 (referred from main.o).
+.\templet.axf: Error: L6218E: Undefined symbol choosedir1 (referred from main.o).
+.\templet.axf: Error: L6218E: Undefined symbol choosedir2 (referred from main.o).
+Not enough information to list image symbols.
+Not enough information to list load addresses in the image map.
+Finished: 2 information, 0 warning and 4 error messages.
+".\templet.axf" - 4 Error(s), 13 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.5.5.1.pack
+                ARM.CMSIS.5.5.1
+                CMSIS (Cortex Microcontroller Software Interface Standard)
+   * Component: CORE Version: 5.2.0
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.STM32F2xx_DFP.2.9.0.pack
+                Keil.STM32F2xx_DFP.2.9.0
+                STMicroelectronics STM32F2 Series Device Support, Drivers and Examples
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_Target_1
+  C:\Users\adgnn\AppData\Local\Arm\Packs\ARM\CMSIS\5.5.1\CMSIS\Core\Include
+  C:\Users\adgnn\AppData\Local\Arm\Packs\Keil\STM32F2xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F2xx\Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE:5.2.0
+Target not created.
+Build Time Elapsed:  00:00:15
+</pre>
+</body>
+</html>
