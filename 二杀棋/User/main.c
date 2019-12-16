@@ -724,24 +724,16 @@ void choosedir(int direction){
 							if(Player2->chessState[whichChess-1] == 1){
 									tempX = cx ;
 									tempY = cy ;
-									if(cx >= 0){
-											// 若没有数组越界
-											if(CB[tempX][tempY] == 0){
-													//若对应位置没有棋子，可以移动
-													gocx = tempX + DIR[direction].dx;
-													gocy = tempY + DIR[direction].dy;
-													//选定了落子的坐标，玩家状态进入Move
-													Player2->playerState = Move;
-											}
-											else{
-													//有棋子冲突报错，重新选方向
-													
-											}
+
+									gocx = tempX + DIR[direction].dx;
+									gocy = tempY + DIR[direction].dy;
+									if( CB[gocx][gocy] == 0 && (0<=gocx<=3) && (0<=gocy<=4) ){
+										//若对应位置没有棋子，且在棋盘内，则可以移动
+										Player2->playerState = Move;//选定了落子的坐标，玩家状态进入Move
 									}
-									else{
-											//越界报错，重新选方向
-											
-									}
+									else 
+										//否则不移动
+										Player2->playerState = chooseDir;
 							}
 					}
 
